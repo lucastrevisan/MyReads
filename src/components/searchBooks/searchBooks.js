@@ -18,22 +18,25 @@ class SearchBooks extends React.Component {
     const value = e.target.value;
     const { currentShelfBooks } = this.state;
 
-    value !== '' &&
-      (timeout = setTimeout(async () => {
-        const response = await BooksAPI.search(value);
+    value !== ''
+      ? (timeout = setTimeout(async () => {
+          const response = await BooksAPI.search(value);
 
-        isArray(response) &&
-          response.forEach(book => {
-            const hasBookOnShelf = currentShelfBooks.find(
-              shelfedBook => book.id === shelfedBook.id
-            );
-            hasBookOnShelf && (book.shelf = hasBookOnShelf.shelf);
+          isArray(response) &&
+            response.forEach(book => {
+              const hasBookOnShelf = currentShelfBooks.find(
+                shelfedBook => book.id === shelfedBook.id
+              );
+              hasBookOnShelf && (book.shelf = hasBookOnShelf.shelf);
+            });
+
+          this.setState({
+            searchResult: response
           });
-
-        this.setState({
-          searchResult: response
+        }, 300))
+      : this.setState({
+          searchResult: []
         });
-      }, 300));
   };
 
   async componentDidMount() {

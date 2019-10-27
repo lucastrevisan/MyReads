@@ -44,7 +44,13 @@ class BooksApp extends React.Component {
   }
 
   render() {
-    const { currentlyReading, wantToRead, read, loading } = this.state;
+    const { loading } = this.state;
+    const shelves = [
+      { title: 'Currently Reading', key: 'currentlyReading' },
+      { title: 'Want To Read', key: 'wantToRead' },
+      { title: 'Read', key: 'read' }
+    ];
+
     return (
       <Fragment>
         {loading && <Loader />}
@@ -54,21 +60,14 @@ class BooksApp extends React.Component {
           render={() => (
             <Fragment>
               <h1 className="list-books-title">MyReads</h1>
-              <Bookshelf
-                title="Currently Reading"
-                books={currentlyReading}
-                changeReadStatus={this.updateBookshelf}
-              ></Bookshelf>
-              <Bookshelf
-                title="Want to Read"
-                books={wantToRead}
-                changeReadStatus={this.updateBookshelf}
-              ></Bookshelf>
-              <Bookshelf
-                title="Read"
-                books={read}
-                changeReadStatus={this.updateBookshelf}
-              ></Bookshelf>
+              {shelves.map(shelve => (
+                <Bookshelf
+                  title={shelve.title}
+                  key={shelve.key}
+                  books={this.state[shelve.key]}
+                  changeReadStatus={this.updateBookshelf}
+                ></Bookshelf>
+              ))}
               <Link to="/search" className="open-search">
                 Add a book
               </Link>
